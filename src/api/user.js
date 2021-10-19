@@ -4,7 +4,7 @@ import request from '../utils/request'
 export const login = (data) => {
   return request({
     method: 'POST',
-    url: 'app/v1_0/authorizations',
+    url: '/v1_0/authorizations',
     data
   })
 }
@@ -13,7 +13,7 @@ export const login = (data) => {
 export const sendSmd = (mobile) => {
   return request({
     method: 'GET',
-    url: `/app/v1_0/sms/codes/${mobile}`
+    url: `/v1_0/sms/codes/${mobile}`
   })
 }
 
@@ -21,7 +21,7 @@ export const sendSmd = (mobile) => {
 export const getUserInfo = () => {
   return request({
     method: 'GET',
-    url: '/app/v1_0/user'
+    url: '/v1_0/user'
     /* headers: {
       Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzQyOTA0NDAsInVzZXJfaWQiOjE0NDg5MDAzODg5NzQ0OTM2OTYsInJlZnJlc2giOmZhbHNlfQ.yXWOVZBh_iQcxR1adGPgoqeEgKsYhJqN-o3J1zj-pmY'
     } */
