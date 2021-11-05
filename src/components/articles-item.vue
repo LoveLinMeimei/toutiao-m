@@ -1,6 +1,13 @@
 <template>
   <div class='articles-item'>
-    <van-cell :title="article.title">
+    <van-cell
+      :title="article.title"
+      :to="{
+        name: 'article',
+        params: {
+          articleId: article.art_id
+        }
+      }">
       <template slot="label">
         <div class="images-wrap" v-if="article.cover.type===3">
           <div class="img-item" v-for="(img, index) in article.cover.images" :key="index">

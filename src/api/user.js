@@ -27,3 +27,30 @@ export const getUserInfo = () => {
     } */
   })
 }
+
+// 获取文章详情
+export const getActileDetail = (articleId) => {
+  return request({
+    method: 'GET',
+    url: `v1_0/articles/${articleId}`
+  })
+}
+
+// 关注用户
+export const followUser = usereId => {
+  return request({
+    method: 'POST',
+    url: '/v1_0/user/followings',
+    data: {
+      target: usereId
+    }
+  })
+}
+
+// 取消关注用户
+export const unFollowUser = usereId => {
+  return request({
+    method: 'DELETE',
+    url: `/v1_0/user/followings/${usereId}`
+  })
+}

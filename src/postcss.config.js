@@ -5,7 +5,8 @@ module.exports = {
       rootValue: 37.5,
       /* propList 用来设定可以从 px 转为 rem 的属性
         例如 * 就是所有属性都要转换，width 就是仅转换 width 属性 */
-      propList: ['*']
+      propList: ['*'],
+      exclude: 'github-markdown'
     }
   }
 }

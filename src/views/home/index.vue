@@ -2,7 +2,13 @@
   <div class='home-container'>
     <van-nav-bar class="my-nav-bar">
       <template #title>
-        <van-button class="search-btn" icon="search" round type="info">搜索</van-button>
+        <van-button
+          class="search-btn"
+          icon="search"
+          round
+          type="info"
+          to="/search"
+        >搜索</van-button>
       </template>
     </van-nav-bar>
 
@@ -19,7 +25,10 @@
         :key="channel.id"
         :title="channel.name"
       >
-        <articles-list class="articles-channel" :channel="channel"></articles-list>
+        <articles-list
+          class="articles-channel"
+          :channel="channel"
+        ></articles-list>
       </van-tab>
       <div class="tab-placeholder" slot="nav-right"></div>
       <van-icon
