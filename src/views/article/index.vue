@@ -30,14 +30,26 @@
         ref="article-content"
       >
       </div>
+      <van-divider dashed>正文结束</van-divider>
+      <span class="all-comments-text">全部评论</span>
+      <comments-list
+        :list="list"
+        :articleId="articleId"
+        @openPopup="openCommentsPopup"
+        @updata-total-count="totalCount=$event"
+      />
     </div>
     <!-- 底部 -->
     <div class="footer">
-      <van-button round type="default">写评论</van-button>
+      <van-button
+        round
+        type="default"
+        @click="toggleShowPopup=true"
+      >写评论</van-button>
       <van-icon
         size="20"
         name="comment-o"
-        badge="20"
+        :badge="totalCount"
       />
       <van-icon size="20"
         :color="detailList.is_collected ? 'red' : '#333'"
@@ -53,6 +65,33 @@
       <van-icon size="20" name="share-o" />
     </div>
     <!-- /底部 -->
+
+    <!-- 发布评论 -->
+    <van-popup v-model="toggleShowPopup" position="bottom">
+      <comments-post
+        @post-comments="postComments"
+        :target="articleId"
+      ></comments-post>
+    </van-popup>
+    <!-- /发布评论 -->
+
+    <!-- 评论回复 -->
+      <van-popup
+        v-model="toggleCommentsShowPopup"
+        position="bottom"
+        :style="{ height: '90%' }"
+      >
+        <!-- 这里使用v-if的目的是让组件随着弹出层的显示进行渲染和销毁，防止加载过的组件不重新渲染导致数据不会重新加载的问题 -->
+        <comments-reply
+          v-if="toggleCommentsShowPopup"
+          :commentsItem="commentsItem"
+          :articleId="articleId"
+          @showPopupComments="toggleShowPopup=true"
+          @close="toggleCommentsShowPopup=false"
+        >
+        </comments-reply>
+      </van-popup>
+      <!-- /评论回复 -->
   </div>
 </template>
 
@@ -62,11 +101,20 @@
 // 方式二：props传参，推荐 this.articleId
 import { getActileDetail, followUser, unFollowUser } from '@/api/user'
 import { addCollect, delCollect, addDislikesArticle, delDislikesArticle } from '@/api/articles'
+
+import CommentsList from './components/comments-list'
+import CommentsPost from './components/comments-post.vue'
+import CommentsReply from './components/comments-reply.vue'
+
 import { ImagePreview } from 'vant'
+
 import './github-markdown.css'
 export default {
   name: 'articleIndex',
   components: {
+    CommentsList,
+    CommentsPost,
+    CommentsReply
   },
   props: {
     articleId: {
@@ -77,7 +125,12 @@ export default {
   data () {
     return {
       detailList: {},
-      followLoading: false // 关注的loading状态
+      list: [], // 文章评论列表
+      followLoading: false, // 关注的loading状态
+      toggleShowPopup: false, // 评论弹出层的展示
+      toggleCommentsShowPopup: false, // 回复评论弹出层
+      commentsItem: {}, // 回复评论的每一项
+      totalCount: 0 // 总的评论数
     }
   },
   methods: {
@@ -173,6 +226,25 @@ export default {
       } catch (error) {
         this.$toast.fail('操作失败')
       }
+    },
+
+    // 发布文章评论
+    postComments (newObj) {
+      // console.log(newObj)
+      // 关闭发布评论弹出层
+      this.toggleShowPopup = false
+      // 把发布成功的评论数据对象放到评论列表顶部
+      this.list.unshift(newObj)
+      // 更改评论总数
+      this.totalCount++
+    },
+
+    // 点击回复评论
+    openCommentsPopup (commentsItem) {
+      // 展示回复内容
+      this.toggleCommentsShowPopup = true
+      // 把评论的信息放到data中，方便等一下传给子组件comments-reply
+      this.commentsItem = commentsItem
     }
   },
   computed: {
@@ -209,6 +281,7 @@ export default {
     right: 0px;
     overflow-y: scroll;
     padding: 0 12px;
+    background-color: #fff;
     .title {
       font-size: 16px;
       color: #333
@@ -238,6 +311,10 @@ export default {
           }
         }
       }
+    }
+    .all-comments-text {
+      font-size: 13px;
+      margin-left: 12px;
     }
   }
   .footer {

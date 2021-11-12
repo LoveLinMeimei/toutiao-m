@@ -15,3 +15,7 @@ dayjs.locale('zh-cn')
 vue.filter('relativeTime', value => {
   return dayjs().to(dayjs(value))
 })
+
+vue.filter('dataTime', (value, format = 'YYYY-MM-DD HH:mm:ss') => {
+  return dayjs(value).format(format)
+})
