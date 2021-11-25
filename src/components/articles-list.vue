@@ -1,5 +1,5 @@
 <template>
-  <div class='articles-list'>
+  <div class='articles-list' ref="articleList">
     <van-pull-refresh
       v-model="dropDownLoading"
       :success-text="successText"
@@ -25,6 +25,8 @@
 <script>
 import { getArticles } from '@/api/articles'
 import ArticlesItem from '@/components/articles-item'
+import { debounce } from 'lodash'
+
 export default {
   name: 'articlesList',
   components: {
@@ -43,7 +45,8 @@ export default {
       atcilesLoading: false,
       finished: false,
       dropDownLoading: false,
-      successText: ''
+      successText: '',
+      scrollTop: 0 // 列表滚动到顶部的距离
     }
   },
   methods: {
@@ -86,6 +89,20 @@ export default {
   created () {
   },
   mounted () {
+    // 获取滚动的位置
+    const articleList = this.$refs.articleList
+    articleList.onscroll = debounce(() => {
+      // 添加防抖
+      this.scrollTop = articleList.scrollTop
+    }, 50)
+  },
+  activated () {
+    // console.log('组件被重新渲染了')
+    const articleList = this.$refs.articleList
+    articleList.scrollTop = this.scrollTop
+  },
+  deactivated () {
+    // console.log('组件被销毁了')
   },
   watch: {
   }

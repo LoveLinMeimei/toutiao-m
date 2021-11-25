@@ -29,6 +29,7 @@ export default {
   created () {
   },
   mounted () {
+    this.$store.commit('addCachePage', 'LayoutIndex')
   },
   watch: {
   }

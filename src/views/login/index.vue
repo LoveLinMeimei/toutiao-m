@@ -106,6 +106,7 @@ export default {
       })
       try {
         const user = await login(this.user)
+        // console.log(user)
         // 把touken存在Vuex的好处：获取方便还能响应式
         this.$store.commit('setUser', user.data.data)
         this.$toast({
@@ -113,7 +114,10 @@ export default {
           message: '登录成功',
           position: 'top'
         })
-        this.$router.back()
+        // 清除Layout的缓存
+        this.$store.commit('removeCachePage', 'LayoutIndex')
+        // this.$router.back() 这种方法不好，应该是谁跳转到登录页面就返回谁
+        this.$router.push(this.$route.query.redirect || '/')
       } catch (err) {
         this.$toast({
           type: 'fail',

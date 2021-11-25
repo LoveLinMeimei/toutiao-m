@@ -7,14 +7,18 @@
             class="avatar"
             round
             fit="cover"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="userInfo.photo"
           />
         </template>
         <template #title>
-          <span>头条号</span>
+          <span>{{ userInfo.name }}</span>
         </template>
         <template #right-icon>
-          <van-button round class="edit-btn">
+          <van-button
+            round
+            class="edit-btn"
+            @click="$router.push('/user/profile')"
+          >
             编辑资料
           </van-button>
         </template>
@@ -39,7 +43,7 @@
       </van-grid>
     </van-cell-group>
 
-    <div class="no-login" v-else @click="$router.push('/login')">
+    <div class="no-login" v-else @click="$router.push({name: 'login',query: {redirect: '/my'}})">
       <van-image
         class="no-login-img"
         width="70"
