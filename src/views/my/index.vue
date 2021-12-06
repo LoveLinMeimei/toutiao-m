@@ -75,7 +75,7 @@
 import { mapState } from 'vuex'
 import { getUserInfo } from '@/api/user.js'
 export default {
-  name: 'myIndex',
+  name: 'myIndex', // name
   components: {
   },
   props: {
